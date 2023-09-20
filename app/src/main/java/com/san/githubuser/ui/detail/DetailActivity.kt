@@ -1,14 +1,14 @@
-package com.san.githubuser
+package com.san.githubuser.ui.detail
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.san.githubuser.R
 import com.san.githubuser.databinding.ActivityDetailBinding
-import com.san.githubuser.ui.detail.SectionsPagerAdapter
+import com.san.githubuser.ui.detail.fragment.SectionsPagerAdapter
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding

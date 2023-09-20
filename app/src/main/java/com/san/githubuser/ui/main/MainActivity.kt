@@ -1,11 +1,12 @@
-package com.san.githubuser
+package com.san.githubuser.ui.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import com.san.githubuser.R
 import com.san.githubuser.databinding.ActivityMainBinding
+import com.san.githubuser.ui.detail.DetailActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -14,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         with(binding) {
             searchView.setupWithSearchBar(searchBar)
@@ -37,5 +37,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+
     }
+
 }
