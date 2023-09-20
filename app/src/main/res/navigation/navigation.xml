@@ -6,11 +6,11 @@
     app:startDestination="@id/mainActivity">
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.san.githubuser.MainActivity"
+        android:name="com.san.githubuser.ui.main.MainActivity"
         android:label="MainActivity" />
 
     <activity
         android:id="@+id/detailActivity"
-        android:name="com.san.githubuser.DetailActivity"
+        android:name="com.san.githubuser.ui.detail.DetailActivity"
         android:label="DetailActivity" />
 </navigation>
