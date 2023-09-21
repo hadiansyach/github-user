@@ -97,5 +97,6 @@
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="username">Username</string>
+    <string name="network_error">Network Error</string>
 
 </resources>
