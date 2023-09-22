@@ -6,12 +6,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.san.githubuser.R
 import com.san.githubuser.databinding.ActivityMainBinding
 import com.san.githubuser.ui.data.response.GithubResponse
-import com.san.githubuser.ui.data.response.ItemsItem
+import com.san.githubuser.ui.data.response.Users
 import com.san.githubuser.ui.data.retrofit.ApiConfig
 import com.san.githubuser.ui.detail.DetailActivity
 import retrofit2.Call
@@ -29,6 +30,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            MainViewModel::class.java
+        )
+        mainViewModel.listUser.observe(this) { user ->
+            setUserData(user)
+        }
 
         with(binding) {
             searchView.setupWithSearchBar(searchBar)
@@ -57,46 +65,24 @@ class MainActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvUserGithub.addItemDecoration(itemDecoration)
 
-        findUser()
+        mainViewModel.listUser.observe(this) { user ->
+            setUserData(user)
+        }
+
+        mainViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
     }
 
-    private fun findUser() {
-        showLoading(true)
-        val client = ApiConfig.getApiService().getUsers("hadiansyach")
-        client.enqueue(object : Callback<GithubResponse> {
-            override fun onResponse(
-                call: Call<GithubResponse>,
-                response: Response<GithubResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        setUserData(responseBody.items)
-                    }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<GithubResponse>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
-    }
-
-    private fun setUserData(githubUsers: List<ItemsItem>) {
+    private fun setUserData(githubUsers: List<Users>) {
         val adapter = UserAdapter()
         adapter.submitList(githubUsers)
         binding.rvUserGithub.adapter = adapter
+        Log.d(TAG, "setUserData: dapat dijalankan")
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
