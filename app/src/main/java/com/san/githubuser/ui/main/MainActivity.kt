@@ -1,6 +1,5 @@
 package com.san.githubuser.ui.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,21 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.san.githubuser.R
 import com.san.githubuser.databinding.ActivityMainBinding
-import com.san.githubuser.ui.data.response.GithubResponse
-import com.san.githubuser.ui.data.response.Users
-import com.san.githubuser.ui.data.retrofit.ApiConfig
-import com.san.githubuser.ui.detail.DetailActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.san.githubuser.data.response.Users
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     companion object {
-        private val TAG = "MainActivity"
+        private const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,9 +24,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            MainViewModel::class.java
-        )
+        val mainViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        )[MainViewModel::class.java]
         mainViewModel.listUser.observe(this) { user ->
             setUserData(user)
         }
@@ -44,20 +38,21 @@ class MainActivity : AppCompatActivity() {
                 .editText
                 .setOnEditorActionListener { textView, actionId, event ->
                     searchBar.text = searchView.text
+                    mainViewModel.findUser(searchView.text.toString())
                     searchView.hide()
-                    Toast.makeText(this@MainActivity, searchView.text, Toast.LENGTH_SHORT).show()
                     true
                 }
-            searchBar.inflateMenu(R.menu.option_menu)
-            searchBar.setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.setting -> {
-                        val action = Intent(this@MainActivity, DetailActivity::class.java)
-                        startActivity(action)
-                    }
-                }
-                true
-            }
+//            TODO: Setup menu
+//            searchBar.inflateMenu(R.menu.option_menu)
+//            searchBar.setOnMenuItemClickListener {
+//                when (it.itemId) {
+//                    R.id.setting -> {
+//                        val action = Intent(this@MainActivity, DetailActivity::class.java)
+//                        startActivity(action)
+//                    }
+//                }
+//                true
+//            }
         }
 
         val layoutManager = LinearLayoutManager(this)
@@ -70,7 +65,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         mainViewModel.isLoading.observe(this) {
-            showLoading(it)
+            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        mainViewModel.errorMessage.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -80,9 +79,5 @@ class MainActivity : AppCompatActivity() {
         adapter.submitList(githubUsers)
         binding.rvUserGithub.adapter = adapter
         Log.d(TAG, "setUserData: dapat dijalankan")
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }

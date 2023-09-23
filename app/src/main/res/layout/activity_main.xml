@@ -58,12 +58,12 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_user" />
 
-        <TextView
-            android:id="@+id/tvNetworkError"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/network_error" />
+<!--        <TextView-->
+<!--            android:id="@+id/tvNetworkError"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center"-->
+<!--            android:text="@string/network_error" />-->
 
         <ProgressBar
             android:id="@+id/progressBar"

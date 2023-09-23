@@ -1,5 +1,6 @@
 package com.san.githubuser.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,8 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.san.githubuser.databinding.ItemUserBinding
-import com.san.githubuser.ui.data.response.Users
-import java.lang.System.load
+import com.san.githubuser.data.response.Users
 
 class UserAdapter : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -19,10 +19,11 @@ class UserAdapter : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = getItem(position)
+        Log.d("UserAdapter", "onBindViewHolder: $user")
         holder.bind(user)
     }
 
-    class ViewHolder(val binding: ItemUserBinding) :
+    class ViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(users: Users) {
             binding.tvNama.text = users.login
