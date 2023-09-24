@@ -98,5 +98,6 @@
     <string name="following">Following</string>
     <string name="username">Username</string>
     <string name="network_error">Network Error</string>
+    <string name="tidak_ada_data">Tidak ada data</string>
 
 </resources>

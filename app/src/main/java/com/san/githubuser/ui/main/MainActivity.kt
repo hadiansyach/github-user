@@ -72,6 +72,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
 
+
+
     }
 
     private fun setUserData(githubUsers: List<Users>) {

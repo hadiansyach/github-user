@@ -20,6 +20,9 @@ class MainViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
+    private val _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean> = _isEmpty
+
     companion object {
         private const val TAG = "MainViewModel"
     }
@@ -39,6 +42,7 @@ class MainViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     Log.d("MainViewModel", "onResponse: ${response.body()?.items}")
+                    _isEmpty.value = response.body()?.items!!.isEmpty()
                     _listUser.value = response.body()?.items
                 } else {
                     _errorMessage.value = "Gagal mengambil data: ${response.message()}"
