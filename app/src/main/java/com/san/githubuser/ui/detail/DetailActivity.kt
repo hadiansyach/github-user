@@ -17,7 +17,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
 
     companion object {
-        private const val EXTRA_LOGIN = "login"
+        const val EXTRA_LOGIN = "login"
 
         @StringRes
         private val TAB_TITLES = intArrayOf(

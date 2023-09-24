@@ -1,5 +1,6 @@
 package com.san.githubuser.data.response
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class GithubResponse(

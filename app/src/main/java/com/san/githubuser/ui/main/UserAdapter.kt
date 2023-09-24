@@ -1,5 +1,6 @@
 package com.san.githubuser.ui.main
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.san.githubuser.databinding.ItemUserBinding
 import com.san.githubuser.data.response.Users
+import com.san.githubuser.ui.detail.DetailActivity
 
 class UserAdapter : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
 
@@ -26,11 +28,18 @@ class UserAdapter : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
     class ViewHolder(private val binding: ItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(users: Users) {
-            binding.tvNama.text = users.login
-            Glide.with(binding.root)
-                .load(users.avatarUrl)
-                .into(binding.ivProfilePicture)
-
+            binding.apply {
+                binding.tvNama.text = users.login
+                Glide.with(binding.root)
+                    .load(users.avatarUrl)
+                    .into(binding.ivProfilePicture)
+            }
+            binding.root.setOnClickListener {
+                var intent = Intent(binding.root.context, DetailActivity::class.java)
+                Log.d("UserAdapter", "onBindViewHolder: $intent")
+                intent.putExtra(DetailActivity.EXTRA_LOGIN, users.login)
+                binding.root.context.startActivity(intent)
+            }
         }
     }
 
