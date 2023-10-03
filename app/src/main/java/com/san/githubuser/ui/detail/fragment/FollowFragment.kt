@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.san.githubuser.data.response.Users
+import com.san.githubuser.data.remote.response.Users
 import com.san.githubuser.databinding.FragmentFollowBinding
 import com.san.githubuser.ui.detail.DetailActivity
-import com.san.githubuser.ui.main.UserAdapter
+import com.san.githubuser.ui.adapter.UserAdapter
+import com.san.githubuser.ui.viewmodel.FollowViewModel
 
 class FollowFragment : Fragment() {
     private lateinit var binding: FragmentFollowBinding

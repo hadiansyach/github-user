@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.san.githubuser.databinding.ActivityMainBinding
-import com.san.githubuser.data.response.Users
+import com.san.githubuser.data.remote.response.Users
+import com.san.githubuser.ui.adapter.UserAdapter
+import com.san.githubuser.ui.viewmodel.MainViewModel
 
 
 class MainActivity : AppCompatActivity() {

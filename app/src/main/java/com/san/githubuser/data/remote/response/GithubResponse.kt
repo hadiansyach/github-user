@@ -1,18 +1,17 @@
-package com.san.githubuser.data.response
+package com.san.githubuser.data.remote.response
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class GithubResponse(
 
 	@field:SerializedName("total_count")
-	val totalCount: Int,
+	val totalCount: Int? = null,
 
 	@field:SerializedName("incomplete_results")
-	val incompleteResults: Boolean,
+	val incompleteResults: Boolean? = null,
 
 	@field:SerializedName("items")
-	val items: List<Users>
+	val items: List<Users>? = null
 )
 
 data class Users(
