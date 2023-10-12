@@ -74,7 +74,7 @@ class GithubUserRepository private constructor(
         favUserDao.addFavUser(user)
     }
 
-    fun deleteFavorite(username: String) {
+    suspend fun deleteFavorite(username: String) {
         favUserDao.deleteFavUser(username)
     }
 

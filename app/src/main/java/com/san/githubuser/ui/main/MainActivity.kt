@@ -1,24 +1,27 @@
 package com.san.githubuser.ui.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.san.githubuser.R
 import com.san.githubuser.databinding.ActivityMainBinding
-import com.san.githubuser.data.remote.response.Users
 import com.san.githubuser.ui.adapter.UserAdapter
+import com.san.githubuser.ui.detail.DetailActivity
+import com.san.githubuser.ui.favorite.FavoriteActivity
 import com.san.githubuser.ui.viewmodel.MainViewModel
+import com.san.githubuser.ui.viewmodel.ViewModelFactory
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    companion object {
-        private const val TAG = "MainActivity"
+    private lateinit var adapter: UserAdapter
+    private val mainViewModel: MainViewModel by viewModels {
+        ViewModelFactory.getInstance(application)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +29,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val mainViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        )[MainViewModel::class.java]
-        mainViewModel.listUser.observe(this) { user ->
-            setUserData(user)
+        adapter = UserAdapter {
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_LOGIN, it.login)
+            startActivity(intent)
+        }
+
+        binding.rvUserGithub.adapter = adapter
+
+        mainViewModel.isEmpty.observe(this) {
+            binding.tvEmpty.isVisible = it
+        }
+
+        mainViewModel.isLoading.observe(this) {
+            binding.progressBar.isVisible = it
+        }
+
+        mainViewModel.listUser.observe(this) {
+            adapter.submitList(it)
         }
 
         with(binding) {
@@ -44,44 +59,25 @@ class MainActivity : AppCompatActivity() {
                     searchView.hide()
                     true
                 }
-//            TODO: Setup menu
-//            searchBar.inflateMenu(R.menu.option_menu)
-//            searchBar.setOnMenuItemClickListener {
-//                when (it.itemId) {
-//                    R.id.setting -> {
-//                        val action = Intent(this@MainActivity, DetailActivity::class.java)
-//                        startActivity(action)
-//                    }
-//                }
-//                true
-//            }
+            searchBar.inflateMenu(R.menu.option_menu)
+            searchBar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.favoriteUser -> {
+                        val action = Intent(this@MainActivity, FavoriteActivity::class.java)
+                        startActivity(action)
+                    }
+                    R.id.setting -> {
+                        Toast.makeText(this@MainActivity, "Setting", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                true
+            }
         }
 
         val layoutManager = LinearLayoutManager(this)
         binding.rvUserGithub.layoutManager = layoutManager
+
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvUserGithub.addItemDecoration(itemDecoration)
-
-        mainViewModel.listUser.observe(this) { user ->
-            setUserData(user)
-        }
-
-        mainViewModel.isLoading.observe(this) {
-            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        }
-
-        mainViewModel.errorMessage.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        }
-
-
-
-    }
-
-    private fun setUserData(githubUsers: List<Users>) {
-        val adapter = UserAdapter()
-        adapter.submitList(githubUsers)
-        binding.rvUserGithub.adapter = adapter
-        Log.d(TAG, "setUserData: dapat dijalankan")
     }
 }

@@ -2,9 +2,8 @@ package com.san.githubuser.ui.detail
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,6 @@ import com.san.githubuser.data.local.entity.FavUserEntity
 import com.san.githubuser.databinding.ActivityDetailBinding
 import com.san.githubuser.ui.adapter.SectionsPagerAdapter
 import com.san.githubuser.ui.favorite.FavoriteActivity
-import com.san.githubuser.ui.setting.SettingActivity
 import com.san.githubuser.ui.viewmodel.DetailViewModel
 import com.san.githubuser.ui.viewmodel.ViewModelFactory
 
@@ -34,8 +32,6 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val username = intent.getStringExtra(EXTRA_LOGIN)
-
-        supportActionBar?.title = "Detail User"
 
         detailViewModel.isLoading.observe(this) {
             binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
@@ -63,13 +59,23 @@ class DetailActivity : AppCompatActivity() {
         }
 
         detailViewModel.isFavorite(username.toString()).observe(this) {
-            if (it != null) {
-                binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_favorite_24))
+            if (it) {
+                binding.fabFavorite.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.baseline_favorite_24
+                    )
+                )
                 binding.fabFavorite.setOnClickListener {
                     detailViewModel.deleteFavorite(username.toString())
                 }
             } else {
-                binding.fabFavorite.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_favorite_border_24))
+                binding.fabFavorite.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this,
+                        R.drawable.baseline_favorite_border_24
+                    )
+                )
                 binding.fabFavorite.setOnClickListener {
                     detailViewModel.addFavorite(user)
                 }
@@ -83,26 +89,25 @@ class DetailActivity : AppCompatActivity() {
         TabLayoutMediator(tabs, viewPager) { tab, position ->
             tab.text = resources.getString(TAB_TITLES[position])
         }.attach()
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.option_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
+        with(binding) {
+            topAppBar.inflateMenu(R.menu.option_menu)
+            topAppBar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.favoriteUser -> {
+                        val intent = Intent(this@DetailActivity, FavoriteActivity::class.java)
+                        startActivity(intent)
+                    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.favoriteUser -> {
-                val intent = Intent(this, FavoriteActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.setting -> {
-                val intent = Intent(this, SettingActivity::class.java)
-                startActivity(intent)
+                    R.id.setting -> {
+                        Toast.makeText(this@DetailActivity, "Setting", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                true
             }
         }
-        return super.onOptionsItemSelected(item)
     }
+
 
     companion object {
         const val EXTRA_LOGIN = "login"

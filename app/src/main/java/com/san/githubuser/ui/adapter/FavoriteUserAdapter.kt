@@ -10,8 +10,10 @@ import com.bumptech.glide.Glide
 import com.san.githubuser.data.local.entity.FavUserEntity
 import com.san.githubuser.databinding.FavItemUserBinding
 
-class FavoriteUserAdapter() :
-    ListAdapter<FavUserEntity, FavoriteUserAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class FavoriteUserAdapter(
+    private val onClick: (FavUserEntity) -> Unit,
+    private val onDelete: (FavUserEntity) -> Unit
+) : ListAdapter<FavUserEntity, FavoriteUserAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = FavItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,6 +23,12 @@ class FavoriteUserAdapter() :
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val user = getItem(position)
         holder.bind(user)
+        holder.itemView.setOnClickListener {
+            onClick(user)
+        }
+        holder.binding.btnDelete.setOnClickListener {
+            onDelete(user)
+        }
     }
 
     class MyViewHolder(val binding: FavItemUserBinding) : RecyclerView.ViewHolder(binding.root) {

@@ -12,7 +12,7 @@ interface FavUserDao {
     suspend fun addFavUser(user: FavUserEntity)
 
     @Query("DELETE FROM user WHERE username = :username")
-    fun deleteFavUser(username: String)
+    suspend fun deleteFavUser(username: String)
 
     @Query("SELECT * FROM user ORDER BY id ASC")
     fun getAllFavUser(): LiveData<List<FavUserEntity>>

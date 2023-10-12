@@ -28,7 +28,6 @@
                 android:id="@+id/topAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:menu="@menu/option_menu"
                 app:title="@string/detail_user"
                 app:titleTextColor="@color/white">
 

@@ -1,6 +1,5 @@
 package com.san.githubuser.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +8,7 @@ import com.san.githubuser.data.GithubUserRepository
 import com.san.githubuser.data.Result
 import com.san.githubuser.data.local.entity.FavUserEntity
 import com.san.githubuser.data.remote.response.DetailUserResponse
-import com.san.githubuser.data.remote.retrofit.ApiConfig
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DetailViewModel(private val githubUserRepository: GithubUserRepository) : ViewModel() {
     private val _userEntity = MutableLiveData<FavUserEntity>()
@@ -23,7 +18,7 @@ class DetailViewModel(private val githubUserRepository: GithubUserRepository) : 
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _detailUser = MutableLiveData<DetailUserResponse?>()
-    val detailUser: MutableLiveData<DetailUserResponse?> = _detailUser
+    val detailUser: LiveData<DetailUserResponse?> = _detailUser
 
     fun addFavorite(user: FavUserEntity) {
         viewModelScope.launch {

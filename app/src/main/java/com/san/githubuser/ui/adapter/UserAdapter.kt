@@ -12,7 +12,7 @@ import com.san.githubuser.databinding.ItemUserBinding
 import com.san.githubuser.data.remote.response.Users
 import com.san.githubuser.ui.detail.DetailActivity
 
-class UserAdapter : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
+class UserAdapter(private val onClick: (Users) -> Unit) : ListAdapter<Users, UserAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)

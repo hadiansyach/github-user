@@ -1,5 +1,6 @@
 package com.san.githubuser.ui.detail.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +9,17 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.san.githubuser.data.remote.response.Users
 import com.san.githubuser.databinding.FragmentFollowBinding
 import com.san.githubuser.ui.detail.DetailActivity
 import com.san.githubuser.ui.adapter.UserAdapter
 import com.san.githubuser.ui.viewmodel.FollowViewModel
+import com.san.githubuser.ui.viewmodel.ViewModelFactory
 
 class FollowFragment : Fragment() {
     private lateinit var binding: FragmentFollowBinding
-    private val followViewModel by viewModels<FollowViewModel>()
-
-    companion object {
-        const val ARG_USERNAME = "username"
-        const val ARG_POSITION = "position"
+    private lateinit var adapter: UserAdapter
+    private val followViewModel: FollowViewModel by viewModels {
+        ViewModelFactory.getInstance(requireActivity().application)
     }
 
     override fun onCreateView(
@@ -28,7 +27,7 @@ class FollowFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFollowBinding.inflate(layoutInflater)
+        binding = FragmentFollowBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -41,6 +40,17 @@ class FollowFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.rvFollow.layoutManager = layoutManager
 
+        adapter = UserAdapter {
+            val intent = Intent(requireActivity(), DetailActivity::class.java)
+            intent.putExtra(DetailActivity.EXTRA_LOGIN, it.login)
+            startActivity(intent)
+        }
+
+        binding.rvFollow.adapter = adapter
+        followViewModel.isEmpty.observe(viewLifecycleOwner) {
+            binding.tvEmpty.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
         followViewModel.isLoading.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
         }
@@ -52,12 +62,12 @@ class FollowFragment : Fragment() {
         if (index == 1) {
             followViewModel.getFollowers(username.toString())
             followViewModel.listFollowers.observe(viewLifecycleOwner) {
-                setData(it)
+                adapter.submitList(it)
             }
         } else {
-            followViewModel.getFollowing(username.toString())
+            followViewModel.getFollowings(username.toString())
             followViewModel.listFollowing.observe(viewLifecycleOwner) {
-                setData(it)
+                adapter.submitList(it)
             }
         }
     }
@@ -67,9 +77,8 @@ class FollowFragment : Fragment() {
         binding.root.requestLayout()
     }
 
-    private fun setData(list: List<Users>) {
-        val adapter = UserAdapter()
-        adapter.submitList(list)
-        binding.rvFollow.adapter = adapter
+    companion object {
+        const val ARG_USERNAME = "username"
+        const val ARG_POSITION = "position"
     }
 }
