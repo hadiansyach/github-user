@@ -2,7 +2,6 @@ package com.san.githubuser.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -13,6 +12,7 @@ import com.san.githubuser.databinding.ActivityMainBinding
 import com.san.githubuser.ui.adapter.UserAdapter
 import com.san.githubuser.ui.detail.DetailActivity
 import com.san.githubuser.ui.favorite.FavoriteActivity
+import com.san.githubuser.ui.setting.SettingActivity
 import com.san.githubuser.ui.viewmodel.MainViewModel
 import com.san.githubuser.ui.viewmodel.ViewModelFactory
 
@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
                         startActivity(action)
                     }
                     R.id.setting -> {
-                        Toast.makeText(this@MainActivity, "Setting", Toast.LENGTH_SHORT).show()
+                        val action = Intent(this@MainActivity, SettingActivity::class.java)
+                        startActivity(action)
                     }
                 }
                 true

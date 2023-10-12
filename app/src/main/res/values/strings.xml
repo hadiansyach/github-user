@@ -101,5 +101,7 @@
     <string name="tidak_ada_data">Tidak ada data</string>
     <string name="user_not_found">User not found</string>
     <string name="favorite">Favorite</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
 
 </resources>

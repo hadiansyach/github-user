@@ -27,9 +27,7 @@ class FavoriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        Log.d("FAVORITE ACTIVITY", "onCreate: Favorite Screen")
-
+        
         val layoutManager = LinearLayoutManager(this)
         binding.rvUserGithub.layoutManager = layoutManager
 
